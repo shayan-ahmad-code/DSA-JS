@@ -149,6 +149,19 @@ class LinkedList {
         this.size++;
     }
 
+    append(element) {
+        let newNode = new Node(element);
+
+        if (this.head === null) return this.head = newNode;
+
+        let last = this.head;
+        while (last.next !== null)
+            last = last.next;
+
+        last.next = newNode;
+    }
+
+
     isEmpty() {
         return this.size === 0;
     }
@@ -171,7 +184,6 @@ class LinkedList {
     }
 }
 
-// Example usage
 let ll = new LinkedList();
 console.log(ll.isEmpty());
 
@@ -185,4 +197,6 @@ console.log("Remove Element: ", ll.removeElement(40));
 ll.insertAt(40, 0);
 let node30 = ll.findNode(30);
 ll.insertAfter(node30, 35);
+ll.append(60);
+console.log("is element present: ", ll.search(20));
 ll.printList();
