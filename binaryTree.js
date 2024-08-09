@@ -38,13 +38,44 @@ class BinarySearchTree {
         }
     }
 
-    findMinNode(node) {
-        if (node.left === null) return node;
-        else
-            return this.findMinNode(node.left);
+    remove(data) {
+        this.root = this.removeNode(this.root, data);
     }
 
-    get RootNode() { return console.log("Root Node -> ", this.root) };
+    removeNode(node, key) {
+        if (node === null) return null;
+
+        if (key < node.data) {
+            node.left = this.removeNode(node.left, key);
+        } else if (key > node.data) {
+            node.right = this.removeNode(node.right, key);
+        } else {
+            if (node.left === null && node.right === null) {
+                return null;
+            }
+
+            if (node.left === null) {
+                return node.right;
+            } else if (node.right === null) {
+                return node.left;
+            }
+
+            let aux = this.findMinNode(node.right);
+            node.data = aux.data;
+            node.right = this.removeNode(node.right, aux.data);
+        }
+        return node;
+    }
+
+    findMinNode(node) {
+        if (node.left === null) return node;
+        return this.findMinNode(node.left);
+    }
+
+    // Return the root node
+    getRootNode() {
+        return this.root;
+    }
 
     search(node, data) {
         if (node === null) return null;
@@ -56,7 +87,6 @@ class BinarySearchTree {
             return node;
     }
 
-    // In-order traversal to print the tree structure
     inOrderTraversal(root) {
         if (root !== null) {
             this.inOrderTraversal(root.left);
@@ -65,7 +95,6 @@ class BinarySearchTree {
         }
     }
 
-    // Pre-order traversal to print the tree structure
     preOrderTraversal(root) {
         if (root !== null) {
             console.log(root.data);
@@ -74,7 +103,6 @@ class BinarySearchTree {
         }
     }
 
-    // Post-order traversal to print the tree structure
     postOrderTraversal(root) {
         if (root !== null) {
             this.postOrderTraversal(root.left);
@@ -83,6 +111,8 @@ class BinarySearchTree {
         }
     }
 }
+
+// Testing the Binary Search Tree
 
 let BST = new BinarySearchTree();
 BST.insert(15);
@@ -98,11 +128,40 @@ BST.insert(27);
 
 // Print the entire tree in order
 console.log("In-order Traversal of Binary Tree:");
-BST.inOrderTraversal(BST.root);
+BST.inOrderTraversal(BST.getRootNode());
 
-foundNode = BST.search(BST.root, 27);
+// Print the entire tree in pre-order
+console.log("Pre-order Traversal of Binary Tree:");
+BST.preOrderTraversal(BST.getRootNode());
+
+// Print the entire tree in post-order
+console.log("Post-order Traversal of Binary Tree:");
+BST.postOrderTraversal(BST.getRootNode());
+
+// Search for a node
+let foundNode = BST.search(BST.getRootNode(), 27);
 if (foundNode) {
     console.log("Node found:", foundNode.data);
 } else {
     console.log("Node not found.");
 }
+
+// Remove a node
+console.log("Removing node with value 17...");
+BST.remove(17);
+
+// Print the entire tree in order after removal
+console.log("In-order Traversal of Binary Tree after removal:");
+BST.inOrderTraversal(BST.getRootNode());
+
+// Search for a removed node
+foundNode = BST.search(BST.getRootNode(), 17);
+if (foundNode) {
+    console.log("Node found:", foundNode.data);
+} else {
+    console.log("Node not found.");
+}
+
+// Get and print the root node
+console.log("Root Node:");
+console.log(BST.getRootNode());
